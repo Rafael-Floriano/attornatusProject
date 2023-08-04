@@ -26,12 +26,12 @@ public class PessoaEntity {
     String nome;
 
     @Column(name = "data_de_nascimento")
-    Date dataDeNascimento;
+    String dataDeNascimento;
 
     @OneToMany
     List<EnderecoEntity> enderecos;
 
-    public PessoaEntity(String nome, Date dataDeNascimento) {
+    public PessoaEntity(String nome, String dataDeNascimento) {
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
     }
