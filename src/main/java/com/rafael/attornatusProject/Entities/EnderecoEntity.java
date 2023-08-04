@@ -16,19 +16,19 @@ public class EnderecoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_endereco")
-    Long IdEndereco;
+    @Column(name = "id_endereco", nullable = false)
+    Long idEndereco;
 
-    @Column(name = "logradouro")
-    String Logradouro;
+    @Column(name = "logradouro", nullable = false)
+    String logradouro;
 
-    @Column(name = "cep")
-    String Cep;
+    @Column(name = "cep", nullable = false)
+    String cep;
 
-    @Column(name = "numero")
-    Long Numero;
+    @Column(name = "numero", nullable = false)
+    Long numero;
 
-    @Column(name = "cidade")
+    @Column(name = "cidade", nullable = false)
     String cidade;
 
 }

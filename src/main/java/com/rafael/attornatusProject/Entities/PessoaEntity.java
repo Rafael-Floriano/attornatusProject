@@ -17,18 +17,23 @@ import java.util.List;
 @Table(name = "pessoa")
 public class PessoaEntity {
 
-    @Column(name = "id_pessoa")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    Long IdPessoa;
+    @Column(name = "id_pessoa", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long idPessoa;
 
-    @Column(name = "nome")
-    String Nome;
+    @Column(name = "nome", nullable = false)
+    String nome;
 
     @Column(name = "data_de_nascimento")
-    Date DataDeNascimento;
+    Date dataDeNascimento;
 
     @OneToMany
-    List<EnderecoEntity> Enderecos;
+    List<EnderecoEntity> enderecos;
+
+    public PessoaEntity(String nome, Date dataDeNascimento) {
+        this.nome = nome;
+        this.dataDeNascimento = dataDeNascimento;
+    }
 
 }
