@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @NoArgsConstructor
@@ -18,4 +19,7 @@ public class PessoaService {
         return pessoaRepository.save(new PessoaEntity(nome, dataNascimento)); 
     }
 
+    public List<PessoaEntity> listarTodasPessoas() {
+        return pessoaRepository.findAll();
+    }
 }

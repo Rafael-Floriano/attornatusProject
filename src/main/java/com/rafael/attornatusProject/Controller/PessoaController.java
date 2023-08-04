@@ -3,10 +3,9 @@ package com.rafael.attornatusProject.Controller;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
 import com.rafael.attornatusProject.Service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/pessoa")
@@ -18,6 +17,11 @@ public class PessoaController {
     @PostMapping
     public PessoaEntity salvarNovaPessoa(@RequestParam String nome,@RequestParam String dataDeNascimento) {
         return pessoaService.salvarNovaPessoa(nome,dataDeNascimento);
+    }
+
+    @GetMapping("/buscarTodasPessoas")
+    public List<PessoaEntity> buscaTodasPessoas() {
+        return pessoaService.listarTodasPessoas();
     }
 
 }
