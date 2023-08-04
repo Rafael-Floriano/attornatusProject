@@ -24,4 +24,9 @@ public class PessoaController {
         return pessoaService.listarTodasPessoas();
     }
 
+    @GetMapping
+    public PessoaEntity buscaApenasUmaPessoa(@RequestParam Long idPessoa) {
+        return pessoaService.buscaApenasUmaPessoa(idPessoa);
+    }
+
 }
