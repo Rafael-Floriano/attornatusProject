@@ -29,4 +29,9 @@ public class PessoaController {
         return pessoaService.buscaApenasUmaPessoa(idPessoa);
     }
 
+    @PutMapping
+    public PessoaEntity editarPessoa() {
+        return new PessoaEntity();
+    }
+
 }
