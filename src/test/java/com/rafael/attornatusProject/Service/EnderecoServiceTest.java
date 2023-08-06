@@ -6,13 +6,13 @@ import com.rafael.attornatusProject.Entities.EnderecoEntity;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
 import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.EnderecoRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class EnderecoServiceTest {
     class salvarNovoEndereco {
 
         @Test
-        public void salvarNovoEnderecoComTodosDadosPreenchidos() {
+        public void TestesalvarNovoEnderecoComTodosDadosPreenchidos() {
             when(enderecoRepository.buscaEnderecoRepetido(any(Long.class))).thenReturn(0L);
             when(pessoaService.buscaApenasUmaPessoa(any(Long.class))).thenReturn(new PessoaEntity("Rafael",LocalDate.of(2004, 5, 15)));
             when(enderecoRepository.save(any(EnderecoEntity.class))).thenReturn(new EnderecoEntity(enderecoDto));
@@ -59,13 +59,13 @@ public class EnderecoServiceTest {
 
 
         @Test
-        public void salvarNovoEnderecoSemIdPessoa() {
+        public void TestesalvarNovoEnderecoSemIdPessoa() {
             when(pessoaService.ChecaSePessoaExiste(null)).thenThrow(PessoaNotFound.class);
             assertThrows(PessoaNotFound.class, () -> enderecoService.salvarNovoEndereco(enderecoDto, null ));
         }
 
         @Test
-        public void salvarNovoEnderecoComPrincipalNulo() {
+        public void TestesalvarNovoEnderecoComPrincipalNulo() {
             enderecoDto.setPrincipal(null);
             when(pessoaService.buscaApenasUmaPessoa(any(Long.class))).thenReturn(new PessoaEntity("Rafael",LocalDate.of(2004, 5, 15)));
             when(enderecoRepository.save(any(EnderecoEntity.class))).thenReturn(new EnderecoEntity(enderecoDto));
@@ -81,7 +81,7 @@ public class EnderecoServiceTest {
     class listarTodosEnderecosPorPessoa {
 
         @Test
-        public void listarTodosEnderecosPorPessoaTodoDadosPreenchidos() {
+        public void TestelistarTodosEnderecosPorPessoaTodoDadosPreenchidos() {
             PessoaEntity pessoaEntity = new PessoaEntity("Rafael", LocalDate.of(2004, 5, 15));
             List<EnderecoEntity> enderecoEntities = Arrays.asList(new EnderecoEntity(
                     1L, pessoaEntity, true, "Dr.antonio alves", "48431-5464", 101L, "Capivari"
@@ -99,7 +99,7 @@ public class EnderecoServiceTest {
         }
 
         @Test
-        public void listarTodosEnderecosCasoPessoaNaoTenhaEndereco() {
+        public void TestelistarTodosEnderecosCasoPessoaNaoTenhaEndereco() {
             PessoaEntity pessoaEntity = new PessoaEntity("Rafael", LocalDate.of(2004, 5, 15));
             List<EnderecoEntity> enderecoEntities = Arrays.asList(new EnderecoEntity(
                     1L, pessoaEntity, true, "Dr.antonio alves", "48431-5464", 101L, "Capivari"
@@ -114,7 +114,7 @@ public class EnderecoServiceTest {
     class buscaEnderecoPorPrincipal{
 
         @Test
-        public void buscaEnderecoPorPrincipalComDadosPreenchidosPrincipalTrue() {
+        public void TestebuscaEnderecoPorPrincipalComDadosPreenchidosPrincipalTrue() {
             List<EnderecoEntity> enderecoList = new ArrayList<>();
             PessoaEntity pessoa = new PessoaEntity("Maria", LocalDate.of(1990, 7, 25));
             enderecoList.add(new EnderecoEntity(2L, pessoa, true, "Rua B", "98765-432", 200L, "Rio de Janeiro"));
@@ -130,7 +130,7 @@ public class EnderecoServiceTest {
         }
 
         @Test
-        public void buscaEnderecoPorPrincipalComDadosPreenchidosPrincipalFalse() {
+        public void TestebuscaEnderecoPorPrincipalComDadosPreenchidosPrincipalFalse() {
             List<EnderecoEntity> enderecoList = new ArrayList<>();
             PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
             enderecoList.add(new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro"));
@@ -147,6 +147,30 @@ public class EnderecoServiceTest {
 
     }
 
+    @Nested
+    class checaSeExisteEnderecoPrincipal {
+        @Test
+        public void TestechecaSeExisteEnderecoPrincipalCasoJaExista() {
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, true, "Rua B", "98765-432", 200L, "Rio de Janeiro");
+            when(enderecoService.buscaEnderecoRepetido(any(Long.class))).thenReturn(1L);
+            assertThrows(ResponseStatusException.class, () -> enderecoService.checaSeExisteEnderecoPrincipal(endereco,1L));
+        }
 
+        @Test
+        public void TestechecaSeExisteEnderecoPrincipalCasoNaoExista() {
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, true, "Rua B", "98765-432", 200L, "Rio de Janeiro");
+            when(enderecoService.buscaEnderecoRepetido(any(Long.class))).thenReturn(0L);
+            enderecoService.checaSeExisteEnderecoPrincipal(endereco,1L);
+        }
+
+        @Test
+        public void TestechecaSeExisteEnderecoPrincipalCasoPrincipalFalse() {
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro");
+            enderecoService.checaSeExisteEnderecoPrincipal(endereco,1L);
+        }
+    }
 
 }

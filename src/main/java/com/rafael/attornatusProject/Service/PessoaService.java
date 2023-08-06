@@ -7,7 +7,6 @@ import com.rafael.attornatusProject.Exception.UnprocessableEntityException;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

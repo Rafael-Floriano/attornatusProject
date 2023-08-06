@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -135,14 +136,14 @@ public class PessoaServiceTest {
     class listaPessoaEntityParaListaPessoaDto{
 
         @Test
-        public void listaPessoaEntityParaListaPessoaDtoComListaVazia() {
+        public void TestelistaPessoaEntityParaListaPessoaDtoComListaVazia() {
             List<PessoaEntity> pessoaListaNula = Arrays.asList(new PessoaEntity());
             List<PessoaDto> pessoaListaEsperada = Arrays.asList(new PessoaDto());
             assertEquals(pessoaListaEsperada.size(), pessoaService.listaPessoaEntityParaListaPessoaDto(pessoaListaNula).size());
         }
 
         @Test
-        public void listaPessoaEntityParaListaPessoaDtoComDadosPreenchidos() {
+        public void TestelistaPessoaEntityParaListaPessoaDtoComDadosPreenchidos() {
             List<PessoaEntity> pessoaEntityList = Arrays.asList(
                     new PessoaEntity(1L,"Rafael", LocalDate.of(2004, 5, 15),null));
             List<PessoaDto> pessoaDtoListaEsperada = Arrays.asList(
@@ -155,6 +156,24 @@ public class PessoaServiceTest {
             assertEquals(pessoaDtoListaEsperada.get(0).getNome(), pessoaDtoResultado.get(0).getNome());
             assertEquals(pessoaDtoListaEsperada.get(0).getDataDeNascimento(), pessoaDtoResultado.get(0).getDataDeNascimento());
 
+        }
+
+    }
+
+    @Nested
+    class ChecaSePessoaExiste {
+        @Test
+        public void TesteChecaSePessoaExisteCasoExista() {
+            PessoaEntity pessoaEntity = new PessoaEntity(1L, "Alice", LocalDate.of(2004, 5, 15), null);
+            when(pessoaRepository.findById(any(Long.class))).thenReturn(Optional.of(pessoaEntity));
+            assertEquals(true, pessoaService.ChecaSePessoaExiste(1L));
+        }
+
+        @Test
+        public void TesteChecaSePessoaExisteCasoNaoExista() {
+            PessoaEntity pessoaEntity = new PessoaEntity(1L, "Alice", LocalDate.of(2004, 5, 15), null);
+            when(pessoaRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+            assertEquals(false, pessoaService.ChecaSePessoaExiste(1L));
         }
     }
 }
