@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,8 @@ public class PessoaService {
     }
 
     @Transactional(readOnly = true)
-    public List<PessoaEntity> listarTodasPessoas() {
-        return pessoaRepository.findAll();
+    public List<PessoaDto> listarTodasPessoas() {
+        return listaPessoaEntityParaListaPessoaDto(pessoaRepository.findAll());
     }
 
     @Transactional(readOnly = true)
@@ -43,10 +44,19 @@ public class PessoaService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public PessoaEntity editarPessoa(PessoaDto pessoaDto) {
+    public PessoaDto editarPessoa(PessoaDto pessoaDto) {
         PessoaEntity pessoaEntity = buscaApenasUmaPessoa(pessoaDto.getIdPessoa());
         pessoaEntity.setNome(pessoaDto.getNome());
         pessoaEntity.setDataDeNascimento(pessoaDto.getDataDeNascimento());
-        return pessoaRepository.save(pessoaEntity);
+        return pessoaRepository.save(pessoaEntity).pessoaEntityToDto();
+    }
+
+    public List<PessoaDto> listaPessoaEntityParaListaPessoaDto(List<PessoaEntity> pessoaEntities) {
+        List<PessoaDto> pessoaDtoLista = new ArrayList<PessoaDto>();
+        pessoaEntities.stream().forEach((pessoaEntity) -> {
+            pessoaDtoLista.add(pessoaEntity.pessoaEntityToDto());
+        });
+
+        return pessoaDtoLista;
     }
 }

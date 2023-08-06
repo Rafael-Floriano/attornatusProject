@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +28,7 @@ public class PessoaEntity {
     private String nome;
 
     @Column(name = "data_de_nascimento")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataDeNascimento;
 
     @OneToMany(fetch = FetchType.LAZY)

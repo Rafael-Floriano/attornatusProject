@@ -74,13 +74,13 @@ public class EnderecoService {
 
     @Transactional(readOnly = true)
     public List<EnderecoEntity>  buscaPorEnderecosPessoa(Long idPessoa) {
-        Optional<EnderecoEntity> optionalEnderecoEntity = enderecoRepository.listarTodosEnderecosPorPessoa(idPessoa);
+        List<EnderecoEntity> listaEnderecoEntity = enderecoRepository.listarTodosEnderecosPorPessoa(idPessoa);
 
-        if (!optionalEnderecoEntity.isPresent()) {
+        if (listaEnderecoEntity.isEmpty()) {
             throw new PessoaNotFound("Essa Pessoa não possui endereços");
         }
 
-        return optionalEnderecoEntity.stream().toList();
+        return listaEnderecoEntity;
     }
 
 }

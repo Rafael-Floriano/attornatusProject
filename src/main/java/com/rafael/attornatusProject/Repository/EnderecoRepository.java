@@ -16,6 +16,6 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> 
     List<EnderecoEntity> buscaEnderecoPorPrincipal(Long idPessoa, Boolean principal);
 
     @Query("SELECT end FROM EnderecoEntity end WHERE end.pessoaEntity.idPessoa = :idPessoa")
-    Optional<EnderecoEntity> listarTodosEnderecosPorPessoa(Long idPessoa);
+    List<EnderecoEntity> listarTodosEnderecosPorPessoa(Long idPessoa);
 
 }
