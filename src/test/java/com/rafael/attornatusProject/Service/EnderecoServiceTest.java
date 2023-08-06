@@ -6,6 +6,7 @@ import com.rafael.attornatusProject.Entities.EnderecoEntity;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
 import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.EnderecoRepository;
+import org.junit.Before;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -106,6 +108,42 @@ public class EnderecoServiceTest {
             assertThrows(PessoaNotFound.class, () -> enderecoService.listarTodosEnderecosPorPessoa(1L));
         }
 
+    }
+
+    @Nested
+    class buscaEnderecoPorPrincipal{
+
+        @Test
+        public void buscaEnderecoPorPrincipalComDadosPreenchidosPrincipalTrue() {
+            List<EnderecoEntity> enderecoList = new ArrayList<>();
+            PessoaEntity pessoa = new PessoaEntity("Maria", LocalDate.of(1990, 7, 25));
+            enderecoList.add(new EnderecoEntity(2L, pessoa, true, "Rua B", "98765-432", 200L, "Rio de Janeiro"));
+            when(enderecoRepository.buscaEnderecoPorPrincipal(any(Long.class), any(Boolean.class))).thenReturn(new ArrayList<EnderecoEntity>(enderecoList));
+            List<EnderecoDto> enderecoDtoListaResultado = enderecoService.buscaEnderecoPorPrincipal(1L, true);
+
+            assertEquals("Maria", enderecoDtoListaResultado.get(0).getPessoaDto().getNome());
+            assertEquals(enderecoList.get(0).getIdEndereco(), enderecoDtoListaResultado.get(0).getIdEndereco());
+            assertEquals(enderecoList.get(0).getLogradouro(), enderecoDtoListaResultado.get(0).getLogradouro());
+            assertEquals(enderecoList.get(0).getNumero(), enderecoDtoListaResultado.get(0).getNumero());
+            assertEquals(enderecoList.get(0).getCep(), enderecoDtoListaResultado.get(0).getCep());
+            assertEquals(enderecoList.get(0).getCidade(), enderecoDtoListaResultado.get(0).getCidade());
+        }
+
+        @Test
+        public void buscaEnderecoPorPrincipalComDadosPreenchidosPrincipalFalse() {
+            List<EnderecoEntity> enderecoList = new ArrayList<>();
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            enderecoList.add(new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro"));
+            when(enderecoRepository.buscaEnderecoPorPrincipal(any(Long.class), any(Boolean.class))).thenReturn(new ArrayList<EnderecoEntity>(enderecoList));
+            List<EnderecoDto> enderecoDtoListaResultado = enderecoService.buscaEnderecoPorPrincipal(1L, false);
+
+            assertEquals("Sara", enderecoDtoListaResultado.get(0).getPessoaDto().getNome());
+            assertEquals(enderecoList.get(0).getIdEndereco(), enderecoDtoListaResultado.get(0).getIdEndereco());
+            assertEquals(enderecoList.get(0).getLogradouro(), enderecoDtoListaResultado.get(0).getLogradouro());
+            assertEquals(enderecoList.get(0).getNumero(), enderecoDtoListaResultado.get(0).getNumero());
+            assertEquals(enderecoList.get(0).getCep(), enderecoDtoListaResultado.get(0).getCep());
+            assertEquals(enderecoList.get(0).getCidade(), enderecoDtoListaResultado.get(0).getCidade());
+        }
 
     }
 
