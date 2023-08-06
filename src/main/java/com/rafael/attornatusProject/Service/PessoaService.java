@@ -41,11 +41,9 @@ public class PessoaService {
     @Transactional(readOnly = true)
     public PessoaEntity buscaApenasUmaPessoa(Long idPessoa) {
         Optional<PessoaEntity> optionalPessoaEntity = pessoaRepository.findById(idPessoa);
-
         if (!optionalPessoaEntity.isPresent()) {
             throw new PessoaNotFound("Não foi possível encontrar essa pessoa");
         }
-
         return optionalPessoaEntity.get();
     }
 
@@ -56,7 +54,6 @@ public class PessoaService {
         pessoaEntity.setDataDeNascimento(pessoaDto.getDataDeNascimento());
         return pessoaRepository.save(pessoaEntity).pessoaEntityToDto();
     }
-
     public List<PessoaDto> listaPessoaEntityParaListaPessoaDto(List<PessoaEntity> pessoaEntities) {
         List<PessoaDto> pessoaDtoLista = new ArrayList<PessoaDto>();
         pessoaEntities.stream().forEach((pessoaEntity) -> {
