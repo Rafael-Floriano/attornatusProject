@@ -32,7 +32,7 @@ public class PessoaController {
 
     @PutMapping
     public PessoaEntity editarPessoa(@RequestParam Long idPessoa, @RequestParam String nome,@RequestParam String dataDeNascimento) {
-        return pessoaService.editarPessoa(new PessoaDto(idPessoa, nome, dataDeNascimento, null));
+        return pessoaService.editarPessoa(new PessoaDto(idPessoa, nome, dataDeNascimento));
     }
 
 }

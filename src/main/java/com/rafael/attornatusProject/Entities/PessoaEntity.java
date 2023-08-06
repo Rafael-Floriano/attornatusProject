@@ -1,5 +1,6 @@
 package com.rafael.attornatusProject.Entities;
 
+import com.rafael.attornatusProject.Dto.PessoaDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,10 @@ public class PessoaEntity {
     public PessoaEntity(String nome, String dataDeNascimento) {
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
+    }
+
+    public PessoaDto pessoaEntityToDto() {
+        return new PessoaDto(idPessoa,nome,dataDeNascimento);
     }
 
 }

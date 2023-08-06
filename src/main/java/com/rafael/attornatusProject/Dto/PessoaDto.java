@@ -20,6 +20,6 @@ public class PessoaDto {
 
     private String dataDeNascimento;
 
-    private List<EnderecoDto> endereco;
+//    private List<EnderecoDto> endereco;
 
 }
