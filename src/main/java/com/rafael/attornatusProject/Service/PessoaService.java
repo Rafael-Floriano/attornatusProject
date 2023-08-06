@@ -22,8 +22,9 @@ public class PessoaService {
     private PessoaRepository pessoaRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public PessoaEntity salvarNovaPessoa(String nome, String dataNascimento) {
-        return pessoaRepository.save(new PessoaEntity(nome, dataNascimento)); 
+    public PessoaDto salvarNovaPessoa(String nome, String dataNascimento) {
+        PessoaEntity pessoaEntity = pessoaRepository.save(new PessoaEntity(nome, dataNascimento));
+        return pessoaEntity.pessoaEntityToDto();
     }
 
     @Transactional(readOnly = true)

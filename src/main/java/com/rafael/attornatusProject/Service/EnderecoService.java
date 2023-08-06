@@ -6,6 +6,7 @@ import com.rafael.attornatusProject.Repository.EnderecoRepository;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import jakarta.persistence.PersistenceException;
 import lombok.NoArgsConstructor;
+import org.hibernate.query.sqm.function.SelfRenderingOrderedSetAggregateFunctionSqlAstExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,7 @@ public class EnderecoService {
     public EnderecoDto salvarNovoEndereco(EnderecoDto enderecoDto, Long idPessoa) {
         EnderecoEntity enderecoEntity = new EnderecoEntity(enderecoDto);
 
-        if (enderecoEntity.getPrincipal() == true) {
-            if (buscaEnderecoRepetido(idPessoa) == 1L) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Só pode haver um endereço principal para a pessoa");
-            }
-        }
+        checaSeExisteEnderecoPrincipal(enderecoEntity, idPessoa);
 
         enderecoEntity.setPessoaEntity(pessoaService.buscaApenasUmaPessoa(idPessoa));
         enderecoRepository.save(enderecoEntity);
@@ -55,4 +52,25 @@ public class EnderecoService {
     public Long buscaEnderecoRepetido(Long idPessoa) {
         return enderecoRepository.buscaEnderecoRepetido(idPessoa);
     }
+
+    @Transactional(readOnly = true)
+    public List<EnderecoDto> buscaEnderecoPorPrincipal(Long idPessoa, Boolean principal) {
+        List<EnderecoEntity> listaDeEnderecosEntity = enderecoRepository.buscaEnderecoPorPrincipal(idPessoa, principal);
+        List<EnderecoDto> listaEnderecoDto = new ArrayList<>();
+        listaDeEnderecosEntity.stream().forEach(enderecoEntity -> {
+           listaEnderecoDto.add(enderecoEntity.EnderecoEntityToDto());
+        });
+
+        return listaEnderecoDto;
+    }
+
+    @Transactional(readOnly = true)
+    public void checaSeExisteEnderecoPrincipal(EnderecoEntity enderecoEntity, Long idPessoa){
+        if (enderecoEntity.getPrincipal() == true) {
+            if (buscaEnderecoRepetido(idPessoa) == 1L) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Só pode haver um endereço principal para a pessoa");
+            }
+        }
+    }
+
 }

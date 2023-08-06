@@ -16,7 +16,7 @@ public class PessoaController {
     private PessoaService pessoaService;
 
     @PostMapping
-    public PessoaEntity salvarNovaPessoa(@RequestParam String nome,@RequestParam String dataDeNascimento) {
+    public PessoaDto salvarNovaPessoa(@RequestParam String nome,@RequestParam String dataDeNascimento) {
         return pessoaService.salvarNovaPessoa(nome,dataDeNascimento);
     }
 

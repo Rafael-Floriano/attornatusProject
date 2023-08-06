@@ -3,10 +3,7 @@ package com.rafael.attornatusProject.Controller;
 import com.rafael.attornatusProject.Dto.EnderecoDto;
 import com.rafael.attornatusProject.Service.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +22,10 @@ public class EnderecoController {
     @GetMapping
     public List<EnderecoDto> buscaTodosEnderecos() {
         return enderecoService.listarTodosEnderecos();
+    }
+
+    @GetMapping("/buscaEnderecoPorPrincipal")
+    public List<EnderecoDto> buscaEnderecoPorPrincipal(@RequestParam Long idPessoa,@RequestParam Boolean principal) {
+        return enderecoService.buscaEnderecoPorPrincipal(idPessoa, principal);
     }
 }
