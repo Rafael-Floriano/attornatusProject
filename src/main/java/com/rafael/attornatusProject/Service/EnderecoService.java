@@ -2,11 +2,9 @@ package com.rafael.attornatusProject.Service;
 
 import com.rafael.attornatusProject.Dto.EnderecoDto;
 import com.rafael.attornatusProject.Entities.EnderecoEntity;
+import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.EnderecoRepository;
-import com.rafael.attornatusProject.Repository.PessoaRepository;
-import jakarta.persistence.PersistenceException;
 import lombok.NoArgsConstructor;
-import org.hibernate.query.sqm.function.SelfRenderingOrderedSetAggregateFunctionSqlAstExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -37,8 +36,8 @@ public class EnderecoService {
     }
 
     @Transactional(readOnly = true)
-    public List<EnderecoDto> listarTodosEnderecos() {
-        List<EnderecoEntity> listaDeEnderecos = enderecoRepository.findAll();
+    public List<EnderecoDto> listarTodosEnderecosPorPessoa(Long idPessoa) {
+        List<EnderecoEntity> listaDeEnderecos = buscaPorEnderecosPessoa(idPessoa);
 
         List<EnderecoDto> enderecoDtos = new ArrayList<EnderecoDto>();
         listaDeEnderecos.stream().forEach((endereco) -> {
@@ -71,6 +70,17 @@ public class EnderecoService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Só pode haver um endereço principal para a pessoa");
             }
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<EnderecoEntity>  buscaPorEnderecosPessoa(Long idPessoa) {
+        Optional<EnderecoEntity> optionalEnderecoEntity = enderecoRepository.listarTodosEnderecosPorPessoa(idPessoa);
+
+        if (!optionalEnderecoEntity.isPresent()) {
+            throw new PessoaNotFound("Essa Pessoa não possui endereços");
+        }
+
+        return optionalEnderecoEntity.stream().toList();
     }
 
 }

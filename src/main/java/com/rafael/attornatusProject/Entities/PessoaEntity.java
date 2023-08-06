@@ -6,9 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -28,12 +27,12 @@ public class PessoaEntity {
     private String nome;
 
     @Column(name = "data_de_nascimento")
-    private String dataDeNascimento;
+    private LocalDate dataDeNascimento;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<EnderecoEntity> endereco;
 
-    public PessoaEntity(String nome, String dataDeNascimento) {
+    public PessoaEntity(String nome, LocalDate dataDeNascimento) {
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
     }

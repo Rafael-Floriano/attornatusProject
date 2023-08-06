@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,7 @@ public class PessoaDto {
 
     private String nome;
 
-    private String dataDeNascimento;
+    private LocalDate dataDeNascimento;
 
 //    private List<EnderecoDto> endereco;
 

@@ -20,8 +20,8 @@ public class EnderecoController {
     }
 
     @GetMapping
-    public List<EnderecoDto> buscaTodosEnderecos() {
-        return enderecoService.listarTodosEnderecos();
+    public List<EnderecoDto> listarTodosEnderecosPorPessoa(@RequestParam Long idPessoa) {
+        return enderecoService.listarTodosEnderecosPorPessoa(idPessoa);
     }
 
     @GetMapping("/buscaEnderecoPorPrincipal")

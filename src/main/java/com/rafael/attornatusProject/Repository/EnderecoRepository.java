@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> {
     @Query("SELECT COUNT(*) FROM EnderecoEntity WHERE pessoaEntity.idPessoa = :idPessoa")
@@ -13,5 +14,8 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> 
 
     @Query("SELECT end FROM EnderecoEntity end WHERE end.pessoaEntity.idPessoa = :idPessoa AND end.principal = :principal")
     List<EnderecoEntity> buscaEnderecoPorPrincipal(Long idPessoa, Boolean principal);
+
+    @Query("SELECT end FROM EnderecoEntity end WHERE end.pessoaEntity.idPessoa = :idPessoa")
+    Optional<EnderecoEntity> listarTodosEnderecosPorPessoa(Long idPessoa);
 
 }

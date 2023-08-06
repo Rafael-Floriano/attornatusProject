@@ -56,6 +56,7 @@ public class EnderecoEntity {
         enderecoDto.setCidade(cidade);
         enderecoDto.setLogradouro(logradouro);
         enderecoDto.setPrincipal(principal);
+        enderecoDto.setNumero(numero);
         enderecoDto.setPessoaDto(pessoaEntity.pessoaEntityToDto());
         return enderecoDto;
     }

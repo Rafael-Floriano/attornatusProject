@@ -6,11 +6,10 @@ import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ public class PessoaService {
     private PessoaRepository pessoaRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public PessoaDto salvarNovaPessoa(String nome, String dataNascimento) {
+    public PessoaDto salvarNovaPessoa(String nome, LocalDate dataNascimento) {
         PessoaEntity pessoaEntity = pessoaRepository.save(new PessoaEntity(nome, dataNascimento));
         return pessoaEntity.pessoaEntityToDto();
     }
