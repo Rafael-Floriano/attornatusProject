@@ -3,9 +3,11 @@ package com.rafael.attornatusProject.Service;
 import com.rafael.attornatusProject.Dto.PessoaDto;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
 import com.rafael.attornatusProject.Exception.PessoaNotFound;
+import com.rafael.attornatusProject.Exception.UnprocessableEntityException;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +25,12 @@ public class PessoaService {
 
     @Transactional(rollbackFor = Exception.class)
     public PessoaDto salvarNovaPessoa(String nome, LocalDate dataNascimento) {
-        PessoaEntity pessoaEntity = pessoaRepository.save(new PessoaEntity(nome, dataNascimento));
-        return pessoaEntity.pessoaEntityToDto();
+        if (nome != null && nome.trim() != "") {
+            PessoaEntity pessoaEntity = pessoaRepository.save(new PessoaEntity(nome, dataNascimento));
+            return pessoaEntity.pessoaEntityToDto();
+        } else {
+            throw new UnprocessableEntityException();
+        }
     }
 
     @Transactional(readOnly = true)
