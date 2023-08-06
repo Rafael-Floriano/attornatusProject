@@ -42,10 +42,10 @@ public class PessoaService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public  PessoaEntity editarPessoa(Long idPessoa, String nome, String dataDeNascimento) {
+    public PessoaEntity editarPessoa(Long idPessoa, String nome, String dataDeNascimento) {
         PessoaEntity pessoaEntity = buscaApenasUmaPessoa(idPessoa);
         pessoaEntity.setNome(nome);
-        pessoaEntity.setNome(dataDeNascimento);
-        pessoaRepository.save(pessoaEntity);
+        pessoaEntity.setDataDeNascimento(dataDeNascimento);
+        return pessoaRepository.save(pessoaEntity);
     }
 }

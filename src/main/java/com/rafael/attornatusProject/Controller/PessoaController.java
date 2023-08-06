@@ -30,8 +30,8 @@ public class PessoaController {
     }
 
     @PutMapping
-    public PessoaEntity editarPessoa() {
-        return new PessoaEntity();
+    public PessoaEntity editarPessoa(@RequestParam Long idPessoa, @RequestParam String nome,@RequestParam String dataDeNascimento) {
+        return pessoaService.editarPessoa(idPessoa, nome, dataDeNascimento);
     }
 
 }
