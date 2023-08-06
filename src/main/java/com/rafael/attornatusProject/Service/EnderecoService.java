@@ -28,6 +28,10 @@ public class EnderecoService {
     public EnderecoDto salvarNovoEndereco(EnderecoDto enderecoDto, Long idPessoa) {
         EnderecoEntity enderecoEntity = new EnderecoEntity(enderecoDto);
 
+        if (enderecoEntity.getPrincipal() == null) {
+            enderecoEntity.setPrincipal(false);
+        }
+
         checaSeExisteEnderecoPrincipal(enderecoEntity, idPessoa);
 
         enderecoEntity.setPessoaEntity(pessoaService.buscaApenasUmaPessoa(idPessoa));

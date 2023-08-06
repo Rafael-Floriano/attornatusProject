@@ -62,4 +62,12 @@ public class PessoaService {
 
         return pessoaDtoLista;
     }
+
+    @Transactional(readOnly = true)
+    public Boolean ChecaSePessoaExiste(Long idPessoa) {
+        if (pessoaRepository.findById(idPessoa).isPresent()) {
+            return true;
+        }
+        return false;
+    }
 }

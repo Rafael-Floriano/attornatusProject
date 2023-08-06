@@ -1,6 +1,7 @@
 package com.rafael.attornatusProject.Entities;
 
 import com.rafael.attornatusProject.Dto.EnderecoDto;
+import com.rafael.attornatusProject.Dto.PessoaDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,6 +49,16 @@ public class EnderecoEntity {
         this.numero = enderecoDto.getNumero();
         this.cidade = enderecoDto.getCidade();
     }
+
+//    public EnderecoEntity(EnderecoDto enderecoDto, PessoaDto pessoaDto) {
+//        this.idEndereco = enderecoDto.getIdEndereco();
+//        this.principal = enderecoDto.getPrincipal();
+//        this.logradouro = enderecoDto.getLogradouro();
+//        this.cep = enderecoDto.getCep();
+//        this.numero = enderecoDto.getNumero();
+//        this.cidade = enderecoDto.getCidade();
+//        this.pessoaEntity = new PessoaEntity(pessoaDto);
+//    }
 
     public EnderecoDto EnderecoEntityToDto() {;
         EnderecoDto enderecoDto = new EnderecoDto();

@@ -39,6 +39,12 @@ public class PessoaEntity {
         this.dataDeNascimento = dataDeNascimento;
     }
 
+//    public PessoaEntity(PessoaDto pessoaDto) {
+//        this.idPessoa = pessoaDto.getIdPessoa();
+//        this.nome = pessoaDto.getNome();
+//        this.dataDeNascimento = pessoaDto.getDataDeNascimento();
+//    }
+
     public PessoaDto pessoaEntityToDto() {
         return new PessoaDto(idPessoa,nome,dataDeNascimento);
     }
