@@ -4,6 +4,7 @@ import com.rafael.attornatusProject.Dto.EnderecoDto;
 import com.rafael.attornatusProject.Dto.PessoaDto;
 import com.rafael.attornatusProject.Entities.EnderecoEntity;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
+import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.EnderecoRepository;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import org.junit.Assert;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +45,7 @@ public class EnderecoServiceTest {
             when(enderecoRepository.buscaEnderecoRepetido(any(Long.class))).thenReturn(0L);
             when(pessoaService.buscaApenasUmaPessoa(any(Long.class))).thenReturn(new PessoaEntity("Rafael",LocalDate.of(2004, 5, 15)));
             when(enderecoRepository.save(any(EnderecoEntity.class))).thenReturn(new EnderecoEntity(enderecoDto));
+            when(pessoaService.ChecaSePessoaExiste(any(Long.class))).thenReturn(true);
 
             EnderecoDto enderecoDtoResultado = enderecoService.salvarNovoEndereco(enderecoDto, 1L);
 
@@ -55,16 +58,20 @@ public class EnderecoServiceTest {
 
         @Test
         public void salvarNovoEnderecoSemIdPessoa() {
-            when(enderecoRepository.buscaEnderecoRepetido(any(Long.class))).thenReturn(0L);
+            when(pessoaService.ChecaSePessoaExiste(null)).thenThrow(PessoaNotFound.class);
+            assertThrows(PessoaNotFound.class, () -> enderecoService.salvarNovoEndereco(enderecoDto, null ));
+        }
+
+        @Test
+        public void salvarNovoEnderecoComPrincipalNulo() {
+            enderecoDto.setPrincipal(null);
             when(pessoaService.buscaApenasUmaPessoa(any(Long.class))).thenReturn(new PessoaEntity("Rafael",LocalDate.of(2004, 5, 15)));
             when(enderecoRepository.save(any(EnderecoEntity.class))).thenReturn(new EnderecoEntity(enderecoDto));
+            when(pessoaService.ChecaSePessoaExiste(any(Long.class))).thenReturn(true);
 
             EnderecoDto enderecoDtoResultado = enderecoService.salvarNovoEndereco(enderecoDto, 1L);
 
-            assertEquals(enderecoDto.getIdEndereco(), enderecoDtoResultado.getIdEndereco());
-            assertEquals(enderecoDto.getNumero(), enderecoDtoResultado.getNumero());
-            assertEquals(enderecoDto.getPrincipal(), enderecoDtoResultado.getPrincipal());
-            assertEquals(enderecoDto.getCep(), enderecoDtoResultado.getCep());
+            assertEquals(false, enderecoDtoResultado.getPrincipal());
         }
     }
 

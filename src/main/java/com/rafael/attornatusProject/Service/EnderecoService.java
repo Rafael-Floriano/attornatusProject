@@ -28,15 +28,19 @@ public class EnderecoService {
     public EnderecoDto salvarNovoEndereco(EnderecoDto enderecoDto, Long idPessoa) {
         EnderecoEntity enderecoEntity = new EnderecoEntity(enderecoDto);
 
-        if (enderecoEntity.getPrincipal() == null) {
-            enderecoEntity.setPrincipal(false);
+        if (pessoaService.ChecaSePessoaExiste(idPessoa)) {
+
+            if (enderecoEntity.getPrincipal() == null) {
+                enderecoEntity.setPrincipal(false);
+            }
+
+            checaSeExisteEnderecoPrincipal(enderecoEntity, idPessoa);
+
+            enderecoEntity.setPessoaEntity(pessoaService.buscaApenasUmaPessoa(idPessoa));
+            enderecoRepository.save(enderecoEntity);
+            return enderecoEntity.EnderecoEntityToDto();
         }
-
-        checaSeExisteEnderecoPrincipal(enderecoEntity, idPessoa);
-
-        enderecoEntity.setPessoaEntity(pessoaService.buscaApenasUmaPessoa(idPessoa));
-        enderecoRepository.save(enderecoEntity);
-        return enderecoEntity.EnderecoEntityToDto();
+        throw new PessoaNotFound("Não existe pessoa com esse indentificado, ID: "+ idPessoa);
     }
 
     @Transactional(readOnly = true)
