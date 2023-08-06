@@ -6,8 +6,6 @@ import com.rafael.attornatusProject.Entities.EnderecoEntity;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
 import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.EnderecoRepository;
-import com.rafael.attornatusProject.Repository.PessoaRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -74,6 +74,41 @@ public class EnderecoServiceTest {
             assertEquals(false, enderecoDtoResultado.getPrincipal());
         }
     }
+
+    @Nested
+    class listarTodosEnderecosPorPessoa {
+
+        @Test
+        public void listarTodosEnderecosPorPessoaTodoDadosPreenchidos() {
+            PessoaEntity pessoaEntity = new PessoaEntity("Rafael", LocalDate.of(2004, 5, 15));
+            List<EnderecoEntity> enderecoEntities = Arrays.asList(new EnderecoEntity(
+                    1L, pessoaEntity, true, "Dr.antonio alves", "48431-5464", 101L, "Capivari"
+            ));
+
+            when(enderecoRepository.listarTodosEnderecosPorPessoa(any(Long.class))).thenReturn(enderecoEntities);
+            when(enderecoService.buscaPorEnderecosPessoa(any(Long.class))).thenReturn(enderecoEntities);
+            List<EnderecoDto> enderecoDtoResultado = enderecoService.listarTodosEnderecosPorPessoa(1L);
+
+            assertEquals(1L, enderecoDtoResultado.get(0).getIdEndereco());
+            assertEquals("Dr.antonio alves", enderecoDtoResultado.get(0).getLogradouro());
+            assertEquals(101L, enderecoDtoResultado.get(0).getNumero());
+            assertEquals("48431-5464", enderecoDtoResultado.get(0).getCep());
+            assertEquals("Capivari", enderecoDtoResultado.get(0).getCidade());
+        }
+
+        @Test
+        public void listarTodosEnderecosCasoPessoaNaoTenhaEndereco() {
+            PessoaEntity pessoaEntity = new PessoaEntity("Rafael", LocalDate.of(2004, 5, 15));
+            List<EnderecoEntity> enderecoEntities = Arrays.asList(new EnderecoEntity(
+                    1L, pessoaEntity, true, "Dr.antonio alves", "48431-5464", 101L, "Capivari"
+            ));
+
+            assertThrows(PessoaNotFound.class, () -> enderecoService.listarTodosEnderecosPorPessoa(1L));
+        }
+
+
+    }
+
 
 
 }
