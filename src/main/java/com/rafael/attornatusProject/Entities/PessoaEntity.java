@@ -29,7 +29,7 @@ public class PessoaEntity {
     @Column(name = "data_de_nascimento")
     private String dataDeNascimento;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pessoa")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<EnderecoEntity> endereco;
 
     public PessoaEntity(String nome, String dataDeNascimento) {

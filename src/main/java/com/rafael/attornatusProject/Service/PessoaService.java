@@ -1,5 +1,6 @@
 package com.rafael.attornatusProject.Service;
 
+import com.rafael.attornatusProject.Dto.PessoaDto;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
 import com.rafael.attornatusProject.Exception.PessoaNotFound;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
@@ -42,10 +43,10 @@ public class PessoaService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public PessoaEntity editarPessoa(Long idPessoa, String nome, String dataDeNascimento) {
-        PessoaEntity pessoaEntity = buscaApenasUmaPessoa(idPessoa);
-        pessoaEntity.setNome(nome);
-        pessoaEntity.setDataDeNascimento(dataDeNascimento);
+    public PessoaEntity editarPessoa(PessoaDto pessoaDto) {
+        PessoaEntity pessoaEntity = buscaApenasUmaPessoa(pessoaDto.getIdPessoa());
+        pessoaEntity.setNome(pessoaDto.getNome());
+        pessoaEntity.setDataDeNascimento(pessoaDto.getDataDeNascimento());
         return pessoaRepository.save(pessoaEntity);
     }
 }

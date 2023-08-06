@@ -21,8 +21,8 @@ public class EnderecoEntity {
     private Long idEndereco;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_pessoa")
-    private PessoaEntity pessoa;
+    @JoinColumn(name = "id_pessoa", nullable = false)
+    private PessoaEntity pessoaEntity;
 
     @Column(name = "principal")
     private Boolean principal;
@@ -38,5 +38,12 @@ public class EnderecoEntity {
 
     @Column(name = "cidade", nullable = false)
     private String cidade;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.principal == null) {
+            this.principal = false;
+        }
+    }
 
 }
