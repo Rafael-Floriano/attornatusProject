@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.annotation.EnableMBeanExport;
 
 @Entity
 @Getter
@@ -17,18 +18,25 @@ public class EnderecoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_endereco", nullable = false)
-    Long idEndereco;
+    private Long idEndereco;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_pessoa")
+    private PessoaEntity pessoa;
+
+    @Column(name = "principal")
+    private Boolean principal;
 
     @Column(name = "logradouro", nullable = false)
-    String logradouro;
+    private String logradouro;
 
     @Column(name = "cep", nullable = false)
-    String cep;
+    private String cep;
 
     @Column(name = "numero", nullable = false)
-    Long numero;
+    private Long numero;
 
     @Column(name = "cidade", nullable = false)
-    String cidade;
+    private String cidade;
 
 }

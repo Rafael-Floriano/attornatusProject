@@ -21,16 +21,16 @@ public class PessoaEntity {
     @Id
     @Column(name = "id_pessoa", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idPessoa;
+    private Long idPessoa;
 
     @Column(name = "nome", nullable = false)
-    String nome;
+    private String nome;
 
     @Column(name = "data_de_nascimento")
-    String dataDeNascimento;
+    private String dataDeNascimento;
 
-    @OneToMany
-    List<EnderecoEntity> enderecos;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pessoa")
+    private List<EnderecoEntity> endereco;
 
     public PessoaEntity(String nome, String dataDeNascimento) {
         this.nome = nome;
