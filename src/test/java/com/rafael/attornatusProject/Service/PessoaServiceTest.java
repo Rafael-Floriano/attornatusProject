@@ -1,7 +1,7 @@
 package com.rafael.attornatusProject.Service;
 import com.rafael.attornatusProject.Dto.PessoaDto;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
-import com.rafael.attornatusProject.Exception.PessoaNotFound;
+import com.rafael.attornatusProject.Exception.NotFound;
 import com.rafael.attornatusProject.Exception.UnprocessableEntityException;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,7 +102,7 @@ public class PessoaServiceTest {
         @Test
         public void TestebuscaApenasUmaPessoaNaoEncontraRegistroNoBanco() {
             when(pessoaRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-            assertThrows(PessoaNotFound.class, () -> pessoaService.buscaApenasUmaPessoa(1L));
+            assertThrows(NotFound.class, () -> pessoaService.buscaApenasUmaPessoa(1L));
         }
     }
 

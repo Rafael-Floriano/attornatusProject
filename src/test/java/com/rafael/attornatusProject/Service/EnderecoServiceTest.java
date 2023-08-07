@@ -4,7 +4,7 @@ import com.rafael.attornatusProject.Dto.EnderecoDto;
 import com.rafael.attornatusProject.Dto.PessoaDto;
 import com.rafael.attornatusProject.Entities.EnderecoEntity;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
-import com.rafael.attornatusProject.Exception.PessoaNotFound;
+import com.rafael.attornatusProject.Exception.NotFound;
 import com.rafael.attornatusProject.Repository.EnderecoRepository;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -60,8 +61,8 @@ public class EnderecoServiceTest {
 
         @Test
         public void TestesalvarNovoEnderecoSemIdPessoa() {
-            when(pessoaService.ChecaSePessoaExiste(null)).thenThrow(PessoaNotFound.class);
-            assertThrows(PessoaNotFound.class, () -> enderecoService.salvarNovoEndereco(enderecoDto, null ));
+            when(pessoaService.ChecaSePessoaExiste(null)).thenThrow(NotFound.class);
+            assertThrows(NotFound.class, () -> enderecoService.salvarNovoEndereco(enderecoDto, null ));
         }
 
         @Test
@@ -105,7 +106,7 @@ public class EnderecoServiceTest {
                     1L, pessoaEntity, true, "Dr.antonio alves", "48431-5464", 101L, "Capivari"
             ));
 
-            assertThrows(PessoaNotFound.class, () -> enderecoService.listarTodosEnderecosPorPessoa(1L));
+            assertThrows(NotFound.class, () -> enderecoService.listarTodosEnderecosPorPessoa(1L));
         }
 
     }
@@ -170,6 +171,39 @@ public class EnderecoServiceTest {
             PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
             EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro");
             enderecoService.checaSeExisteEnderecoPrincipal(endereco,1L);
+        }
+    }
+
+    @Nested
+    class editarEndereco {
+        @Test
+        public void editarEnderecoComDadosPreenchidos() {
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro");
+            when(pessoaService.ChecaSePessoaExiste(any(Long.class))).thenReturn(true);
+            when(enderecoRepository.findById(any(Long.class))).thenReturn(Optional.of(endereco));
+            when(enderecoRepository.save(any(EnderecoEntity.class))).thenReturn(endereco);
+            when(pessoaService.buscaApenasUmaPessoa(any(Long.class))).thenReturn(pessoa);
+            enderecoService.editarEndereco(endereco.EnderecoEntityToDto(), 1L);
+        }
+
+        @Test
+        public void editarEnderecoComDadosOptionalVazio() {
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro");
+            when(pessoaService.ChecaSePessoaExiste(any(Long.class))).thenReturn(true);
+            when(enderecoRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+            assertThrows(NotFound.class, () -> enderecoService.editarEndereco(endereco.EnderecoEntityToDto(), 1L));
+        }
+
+        @Test
+        public void editarEnderecoComDadosCasoPessoaNaoExista() {
+            PessoaEntity pessoa = new PessoaEntity("Sara", LocalDate.of(2005, 7, 25));
+            EnderecoEntity endereco = new EnderecoEntity(2L, pessoa, false, "Rua B", "98765-432", 200L, "Rio de Janeiro");
+            when(pessoaService.ChecaSePessoaExiste(any(Long.class))).thenReturn(false);
+
+            assertThrows(NotFound.class, () -> enderecoService.editarEndereco(endereco.EnderecoEntityToDto(), 1L));
         }
     }
 

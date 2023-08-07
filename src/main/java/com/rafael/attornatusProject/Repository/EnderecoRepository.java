@@ -2,6 +2,7 @@ package com.rafael.attornatusProject.Repository;
 
 import com.rafael.attornatusProject.Entities.EnderecoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,5 +18,9 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> 
 
     @Query("SELECT end FROM EnderecoEntity end WHERE end.pessoaEntity.idPessoa = :idPessoa")
     List<EnderecoEntity> listarTodosEnderecosPorPessoa(Long idPessoa);
+
+    @Modifying
+    @Query("UPDATE EnderecoEntity end SET principal = false Where end.pessoaEntity.idPessoa = :idPessoa")
+    void alteraPrincipalParaFalso(Long idPessoa);
 
 }

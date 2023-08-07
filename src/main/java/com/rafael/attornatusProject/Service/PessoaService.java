@@ -2,7 +2,7 @@ package com.rafael.attornatusProject.Service;
 
 import com.rafael.attornatusProject.Dto.PessoaDto;
 import com.rafael.attornatusProject.Entities.PessoaEntity;
-import com.rafael.attornatusProject.Exception.PessoaNotFound;
+import com.rafael.attornatusProject.Exception.NotFound;
 import com.rafael.attornatusProject.Exception.UnprocessableEntityException;
 import com.rafael.attornatusProject.Repository.PessoaRepository;
 import lombok.NoArgsConstructor;
@@ -41,7 +41,7 @@ public class PessoaService {
     public PessoaEntity buscaApenasUmaPessoa(Long idPessoa) {
         Optional<PessoaEntity> optionalPessoaEntity = pessoaRepository.findById(idPessoa);
         if (!optionalPessoaEntity.isPresent()) {
-            throw new PessoaNotFound("Não foi possível encontrar essa pessoa");
+            throw new NotFound("Não foi possível encontrar essa pessoa");
         }
         return optionalPessoaEntity.get();
     }
