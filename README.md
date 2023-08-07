@@ -30,6 +30,9 @@
 [POST] https://attornatusproject-production.up.railway.app/api/endereco
 - Parametros: logradouro, cep, numero, cidade, idPessoa, principal;
 
+[PUT] https://attornatusproject-production.up.railway.app/api/endereco
+- Parametros: logradouro, cep, numero, cidade, idPessoa, principal;
+
 #### Buscar endereço
 [GET] https://attornatusproject-production.up.railway.app/api/endereco
 - Parametros: idPessoa
@@ -50,6 +53,7 @@
 - https://attornatusproject-production.up.railway.app/api/endereco?idPessoa=1
 - https://attornatusproject-production.up.railway.app/api/endereco/buscaEnderecoPorPrincipal?idPessoa=1&principal=true
 - https://attornatusproject-production.up.railway.app/api/endereco/buscaEnderecoPorPrincipal?idPessoa=1&principal=false
+- https://attornatusproject-production.up.railway.app/api/endereco?principal=true&logradouro=Dr. Antônio Alves&cep=345456464&numero=101&cidade=capivari de baixo&idPessoa=1&idEndereco=2
 
 
 
